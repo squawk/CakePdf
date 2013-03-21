@@ -17,6 +17,10 @@ class WkHtmlToPdfEngine extends AbstractPdfEngine {
  * @param $Pdf CakePdf instance
  */
 	public function __construct(CakePdf $Pdf) {
+		if ($_SERVER['HTTP_HOST'] == 'localhost')
+		{
+			$this->binary = '/Users/bvanskyh/tmp/wkhtmltopdf.app/Contents/MacOS/wkhtmltopdf';
+		}
 		parent::__construct($Pdf);
 	}
 
@@ -85,10 +89,12 @@ class WkHtmlToPdfEngine extends AbstractPdfEngine {
 		$command = $this->binary;
 
 		$command .= " -q";
-		$command .= " --print-media-type";
+//		$command .= " --print-media-type";
 		$command .= " --orientation " . $this->_Pdf->orientation();
 		$command .= " --page-size " . $this->_Pdf->pageSize();
 		$command .= " --encoding " . $this->_Pdf->encoding();
+
+		//$command .= " --header-html http://localhost/header.html";
 
 		$margin = $this->_Pdf->margin();
 
@@ -103,6 +109,8 @@ class WkHtmlToPdfEngine extends AbstractPdfEngine {
 			$command .= sprintf(' --title %s', escapeshellarg($title));
 		}
 		$command .= " - -";
+
+		echo $command;
 
 		return $command;
 	}

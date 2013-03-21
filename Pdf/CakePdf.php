@@ -72,7 +72,7 @@ class CakePdf {
  *
  * @var string
  */
-	protected $_pageSize = 'A4';
+	protected $_pageSize = 'letter';
 
 /**
  * Orientation of the pdf
@@ -212,6 +212,9 @@ class CakePdf {
  * @return string
  */
 	public function output($html = null) {
+
+		//echo $html; exit;
+
 		$Engine = $this->engine();
 		if (!$Engine) {
 			throw new CakeException(__d('cake_pdf', 'Engine is not loaded'));
