@@ -41,6 +41,7 @@ class WkHtmlToPdfEngine extends AbstractPdfEngine {
 		}
 
 		if ((int)$content['return'] !== 0 && !empty($content['stderr'])) {
+			//echo '<br>' . nl2br($content['stderr']);
 			throw new CakeException("Shell error, return code: " . (int)$content['return']);
 		}
 
@@ -79,6 +80,7 @@ class WkHtmlToPdfEngine extends AbstractPdfEngine {
  */
 	protected function _getCommand() {
 		$binary = $this->config('binary');
+		$cover = $this->config('cover');
 
 		if ($binary) {
 			$this->binary = $binary;
@@ -88,13 +90,22 @@ class WkHtmlToPdfEngine extends AbstractPdfEngine {
 		}
 		$command = $this->binary;
 
-		$command .= " -q";
-//		$command .= " --print-media-type";
+		//$command .= " -q";
+		//$command .= " --print-media-type";
 		$command .= " --orientation " . $this->_Pdf->orientation();
 		$command .= " --page-size " . $this->_Pdf->pageSize();
 		$command .= " --encoding " . $this->_Pdf->encoding();
-
+		//$command .= ' --toc';
+		$command .= ' --lowquality';
+		$command .= ' --footer-font-size 8';
+		$command .= ' --footer-spacing 1.5';
+		$command .= ' --footer-line';
+		$command .= ' --footer-right "[page] of [topage]"';
+		$command .= ' --footer-left [subsection]';
 		//$command .= " --header-html http://localhost/header.html";
+		if (!empty($cover)) {
+			$command .= ' cover ' . $cover;
+		}
 
 		$margin = $this->_Pdf->margin();
 

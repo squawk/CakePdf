@@ -124,6 +124,13 @@ class CakePdf {
 	protected $_title = null;
 
 /**
+ * Custom parameter pass to engine
+ *
+ * @var array
+ */
+	protected $_custom = array();
+
+/**
  * Flag that tells if we need to pass it through crypto
  *
  * @var boolean
@@ -497,6 +504,20 @@ class CakePdf {
 			return $this->_title;
 		}
 		$this->_title = $title;
+		return $this;
+	}
+
+/**
+ * Get/Set custom engine parameters.
+ *
+ * @param null|array $custom
+ * @return mixed
+ */
+	public function custom($custom = null) {
+		if ($custom === null) {
+			return $this->_custom;
+		}
+		$this->_custom = $custom;
 		return $this;
 	}
 
