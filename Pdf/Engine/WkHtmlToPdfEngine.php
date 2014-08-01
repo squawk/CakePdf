@@ -28,9 +28,12 @@ class WkHtmlToPdfEngine extends AbstractPdfEngine {
  *
  * @return string raw pdf data
  */
-	public function output() {
-		$content = $this->_exec($this->_getCommand(), $this->_Pdf->html());
-
+	public function output($url = null) {
+		if ($url) {
+			$content = $this->_exec($this->_getCommand($url));
+		} else {
+			$content = $this->_exec($this->_getCommand(), $this->_Pdf->html());
+		}
 		if (strpos(mb_strtolower($content['stderr']), 'error')) {
 			throw new CakeException("System error <pre>" . $content['stderr'] . "</pre>");
 		}
@@ -40,7 +43,7 @@ class WkHtmlToPdfEngine extends AbstractPdfEngine {
 		}
 
 		if ((int)$content['return'] !== 0 && !empty($content['stderr'])) {
-			//echo '<br>' . nl2br($content['stderr']);
+			echo '<br>' . nl2br($content['stderr']);
 			throw new CakeException("Shell error, return code: " . (int)$content['return']);
 		}
 
@@ -54,11 +57,13 @@ class WkHtmlToPdfEngine extends AbstractPdfEngine {
  * @param string $input
  * @return string the result of running the command to generate the pdf
  */
-	protected function _exec($cmd, $input) {
+	protected function _exec($cmd, $input = null) {
 		$result = array('stdout' => '', 'stderr' => '', 'return' => '');
 
 		$proc = proc_open($cmd, array(0 => array('pipe', 'r'), 1 => array('pipe', 'w'), 2 => array('pipe', 'w')), $pipes);
-		fwrite($pipes[0], $input);
+		if ($input) {
+			fwrite($pipes[0], $input);
+		}
 		fclose($pipes[0]);
 
 		$result['stdout'] = stream_get_contents($pipes[1]);
@@ -77,7 +82,7 @@ class WkHtmlToPdfEngine extends AbstractPdfEngine {
  *
  * @return string the command for generating the pdf
  */
-	protected function _getCommand() {
+	protected function _getCommand($url = null) {
 		$binary = $this->config('binary');
 		$cover = $this->config('cover');
 
@@ -102,6 +107,10 @@ class WkHtmlToPdfEngine extends AbstractPdfEngine {
 		$command .= ' --footer-right "[page] of [topage]"';
 		$command .= ' --footer-left [subsection]';
 		//$command .= " --header-html http://localhost/header.html";
+
+		/*$command .= ' --no-stop-slow-scripts';
+		$command .= ' --javascript-delay 1000';*/
+
 		if (!empty($cover)) {
 			$command .= ' cover ' . $cover;
 		}
@@ -118,7 +127,11 @@ class WkHtmlToPdfEngine extends AbstractPdfEngine {
 		if ($title !== null) {
 			$command .= sprintf(' --title %s', escapeshellarg($title));
 		}
-		$command .= " - -";
+		if ($url) {
+			$command .= " $url -";
+		} else {
+			$command .= " - -";
+		}
 
 		return $command;
 	}
