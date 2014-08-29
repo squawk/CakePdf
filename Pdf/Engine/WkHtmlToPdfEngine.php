@@ -9,7 +9,7 @@ class WkHtmlToPdfEngine extends AbstractPdfEngine {
  * @access protected
  * @var string
  */
-	protected $binary = '/usr/bin/wkhtmltopdf';
+	protected $binary = '/usr/local/bin/wkhtmltopdf';
 
 /**
  * Constructor
