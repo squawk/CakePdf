@@ -12,18 +12,6 @@ class WkHtmlToPdfEngine extends AbstractPdfEngine {
 	protected $binary = '/usr/local/bin/wkhtmltopdf';
 
 /**
- * Constructor
- *
- * @param $Pdf CakePdf instance
- */
-	public function __construct(CakePdf $Pdf) {
-		if ($_SERVER['HTTP_HOST'] == 'localhost') {
-			$this->binary = '/usr/local/bin/wkhtmltopdf';
-		}
-		parent::__construct($Pdf);
-	}
-
-/**
  * Generates Pdf from html
  *
  * @return string raw pdf data
@@ -105,7 +93,7 @@ class WkHtmlToPdfEngine extends AbstractPdfEngine {
 		$command .= ' --footer-spacing 1.5';
 		$command .= ' --footer-line';
 		$command .= ' --footer-right "[page] of [topage]"';
-		$command .= ' --footer-left [subsection]';
+		$command .= ' --footer-left [section]';
 		//$command .= " --header-html http://localhost/header.html";
 
 		/*$command .= ' --no-stop-slow-scripts';
