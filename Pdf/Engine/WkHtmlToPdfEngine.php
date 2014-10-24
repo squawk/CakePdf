@@ -93,7 +93,8 @@ class WkHtmlToPdfEngine extends AbstractPdfEngine {
 		$command .= ' --footer-spacing 1.5';
 		$command .= ' --footer-line';
 		$command .= ' --footer-right "[page] of [topage]"';
-		$command .= ' --footer-left [section]';
+		$command .= ' --footer-left [title]';
+		$command .= ' --footer-center [section]';
 		//$command .= " --header-html http://localhost/header.html";
 
 		/*$command .= ' --no-stop-slow-scripts';
