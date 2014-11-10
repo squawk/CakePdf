@@ -74,7 +74,7 @@ class CakePdf {
  *
  * @var string
  */
-	protected $_pageSize = 'A4';
+	protected $_pageSize = 'letter';
 
 /**
  * Orientation of the pdf
@@ -124,6 +124,13 @@ class CakePdf {
  * @var string
  */
 	protected $_title = null;
+
+/**
+ * Custom parameter pass to engine
+ *
+ * @var array
+ */
+	protected $_custom = array();
 
 /**
  * Flag that tells if we need to pass it through crypto
@@ -214,6 +221,9 @@ class CakePdf {
  * @return string
  */
 	public function output($html = null) {
+
+		//echo $html; exit;
+
 		$Engine = $this->engine();
 		if (!$Engine) {
 			throw new CakeException(__d('cake_pdf', 'Engine is not loaded'));
@@ -496,6 +506,20 @@ class CakePdf {
 			return $this->_title;
 		}
 		$this->_title = $title;
+		return $this;
+	}
+
+/**
+ * Get/Set custom engine parameters.
+ *
+ * @param null|array $custom
+ * @return mixed
+ */
+	public function custom($custom = null) {
+		if ($custom === null) {
+			return $this->_custom;
+		}
+		$this->_custom = $custom;
 		return $this;
 	}
 

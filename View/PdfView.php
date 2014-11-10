@@ -90,6 +90,9 @@ class PdfView extends View {
 			return $content;
 		}
 
+		// bvansky: reset cover
+		unset($this->pdfConfig['cover']);
+
 		if (isset($this->pdfConfig['download']) && $this->pdfConfig['download'] === true) {
 			$this->response->download($this->getFilename());
 		}
