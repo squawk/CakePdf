@@ -26,6 +26,7 @@ class WkHtmlToPdfEngine extends AbstractPdfEngine {
  * @return string raw pdf data
  */
 	public function output() {
+
 		$content = $this->_exec($this->_getCommand(), $this->_Pdf->html());
 
 		if (strpos(mb_strtolower($content['stderr']), 'error')) {
@@ -104,10 +105,14 @@ class WkHtmlToPdfEngine extends AbstractPdfEngine {
 		foreach ($options as $key => $value) {
 			if (empty($value)) {
 				continue;
+            } elseif ($key === 'toc') {
+                $command .= ' toc';
 			} elseif ($value === true) {
 				$command .= ' --' . $key;
-			} else {
-				$command .= sprintf(' --%s %s', $key, escapeshellarg($value));
+			} elseif ($key === 'cover') {
+				$command .= sprintf(' %s %s', $key, escapeshellarg($value));
+            } else {
+                $command .= sprintf(' --%s %s', $key, escapeshellarg($value));
 			}
 		}
 		$command .= " - -";
